@@ -25,6 +25,7 @@ namespace Nustache.Core
                 ?? GenericDictionaryValueGetter.GetGenericDictionaryValueGetter(target, name)
                 ?? DictionaryValueGetter.GetDictionaryValueGetter(target, name)
                 ?? MethodInfoValueGetter.GetMethodInfoValueGetter(target, name)
+                ?? LambdaMethodValueGetter.GetLambdaMethodValueGetter(target, name)
                 ?? PropertyInfoValueGetter.GetPropertyInfoValueGetter(target, name)
                 ?? FieldInfoValueGetter.GetFieldInfoValueGetter(target, name)
                 ?? (ValueGetter)new NoValueGetter();
@@ -165,6 +166,32 @@ namespace Nustache.Core
         public override object GetValue()
         {
             return _methodInfo.Invoke(_target, null);
+        }
+    }
+
+
+    internal class LambdaMethodValueGetter : ValueGetter
+    {
+        internal static LambdaMethodValueGetter GetLambdaMethodValueGetter(object target, string name)
+        {
+            Lambda lambda = (Lambda)Delegate.CreateDelegate(typeof(Lambda), target, name, true, false);
+
+            if (lambda != null)
+                return new LambdaMethodValueGetter(lambda);
+            else
+                return null;
+        }
+
+        private readonly Lambda _lambda;
+
+        private LambdaMethodValueGetter(Lambda lambda)
+        {
+            _lambda = lambda;
+        }
+
+        public override object GetValue()
+        {
+            return _lambda;
         }
     }
 

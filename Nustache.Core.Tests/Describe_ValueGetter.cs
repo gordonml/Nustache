@@ -41,6 +41,13 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_gets_lambda_values_from_methods()
+        {
+            ReadWriteInts target = new ReadWriteInts();
+            Assert.AreEqual(new Lambda(target.LambdaMethod), ValueGetter.GetValue(target, "LambdaMethod"));
+        }
+
+        [Test]
         public void It_cant_get_values_from_write_only_properties()
         {
             WriteOnlyInts target = new WriteOnlyInts();
@@ -125,6 +132,7 @@ namespace Nustache.Core.Tests
             public int IntProperty { get { return IntField; } set { IntField = value; } }
             public int IntMethod() { return IntField; }
             public void IntMethod(int value) { IntField = value; }
+            public object LambdaMethod(string value) { return int.Parse(value); }
         }
 
         public class ReadOnlyInts
