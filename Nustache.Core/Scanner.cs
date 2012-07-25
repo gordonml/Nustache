@@ -29,31 +29,36 @@ namespace Nustache.Core
                 {
                     yield return new Block(marker.Substring(1));
                     stripOutNewLine = true;
-                } 
-                else if (marker[0] == '^') 
-                {
-                    yield return new InvertedBlock(marker.Substring(1));
-                    stripOutNewLine = true;
                 }
-                else if (marker[0] == '<')
-                {
-                    yield return new TemplateDefinition(marker.Substring(1));
-                    stripOutNewLine = true;
-                }
-                else if (marker[0] == '/')
-                {
-                    yield return new EndSection(marker.Substring(1));
-                    stripOutNewLine = true;
-                }
-                else if (marker[0] == '>')
-                {
-                    yield return new TemplateInclude(marker.Substring(1));
-                    stripOutNewLine = true;
-                }
-                else if (marker[0] != '!')
-                {
-                    yield return new VariableReference(marker.Trim());
-                }
+				else if (marker[0] == '?')
+				{
+					yield return new TestBlock(marker.Substring(1));
+					stripOutNewLine = true;
+				}
+				else if (marker[0] == '^')
+				{
+					yield return new InvertedBlock(marker.Substring(1));
+					stripOutNewLine = true;
+				}
+				else if (marker[0] == '<')
+				{
+					yield return new TemplateDefinition(marker.Substring(1));
+					stripOutNewLine = true;
+				}
+				else if (marker[0] == '/')
+				{
+					yield return new EndSection(marker.Substring(1));
+					stripOutNewLine = true;
+				}
+				else if (marker[0] == '>')
+				{
+					yield return new TemplateInclude(marker.Substring(1));
+					stripOutNewLine = true;
+				}
+				else if (marker[0] != '!')
+				{
+					yield return new VariableReference(marker.Trim());
+				}
 
                 i = m.Index + m.Length;
 
